@@ -1,0 +1,20 @@
+<GuestBookApp>:
+    GridLayout:
+        cols: 2
+        Label:
+            text: "Имя:"
+        TextInput:
+            id: name_input
+        Label:
+            text: "Комментарий:"
+        TextInput:
+            id: comment_input
+        Button:
+            text: "Добавить"
+            on_press: app.add_entry()
+        ScrollView:
+            TextInput:
+                id: entry_display
+                readonly: True
+                size_hint: (None, None)
+                size: (400, 400)
