@@ -46,11 +46,13 @@ def popFun():
 
 class messagesWindow(Screen):
     def on_pre_enter(self):
-        entries = self.session.query(GuestEntry).all()
-        message_text = ""
-        for entry in entries:
-            message_text += f"Имя: {entry.name}\nEmail: {entry.email}\nСообщение: {entry.comment}\n\n"
-        self.ids.messages_label.text = message_text
+        self.ids.messages_label.text = ""  # Очистить текстовое поле
+        if hasattr(self, 'session'):
+            entries = session.query(GuestEntry).all()
+            message_text = ""
+            for entry in entries:
+                message_text += f"Имя: {entry.name}\nEmail: {entry.email}\nСообщение: {entry.comment}\n\n"
+            self.ids.messages_label.text = message_text
 
 
 
@@ -60,26 +62,21 @@ class signupWindow(Screen):
     message = ObjectProperty(None)
 
     def signupbtn(self):
-        self.engine = create_engine('sqlite:///:memory:', echo=True)  # Используем SQLite в памяти
-        Base.metadata.create_all(self.engine)
-        Session = sessionmaker(bind=self.engine)
-        self.session = Session()
-
         name2 = self.name2.text if self.name else ""  # Проверка наличия имени
         email = self.email.text if self.email else ""  # Проверка наличия email
         message = self.message.text if self.message else ""  #
         if name2 and message:
             # добавляем в бд
             new_entry = GuestEntry(name=name2, email=email, comment=message)  # Сохраняем email
-            self.session.add(new_entry)
-            self.session.commit()
+            session.add(new_entry)
+            session.commit()
             # Очищаем поля
             self.name2.text = ''
             self.email.text = ''
             self.message.text = ''
-        entries = self.session.query(GuestEntry).all()
+        entries = session.query(GuestEntry).all()
         print(entries)
-        sm.get_screen('messages').session = self.session
+        sm.get_screen('messages').session = session
         sm.current = 'messages'
 
 
@@ -92,6 +89,11 @@ class logDataWindow(Screen):
 class windowManager(ScreenManager):
     pass
 
+
+engine = create_engine('sqlite:///:memory:', echo=True)
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 # kv file
 kv = Builder.load_file('guestbook.kv')
