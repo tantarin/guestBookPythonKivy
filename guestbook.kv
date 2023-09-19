@@ -31,8 +31,8 @@ windowManager:
             pos_hint: {"x": 0.05, "top": 0.5}
         TextInput:
             id: message
-            multiline: True  # Сделать многострочным
-            size_hint: 0.6, 0.3  # Увеличить ширину и высоту
+            multiline: True
+            size_hint: 0.6, 0.3
             pos_hint: {"x": 0.27, "top": 0.5}
         Button:
             text: "SUBMIT"
@@ -59,11 +59,9 @@ windowManager:
 
             GridLayout:
                 id: messages_grid
-                spacing: 0  # Установите минимальное значение spacing
+                spacing: 0
                 padding: 5
                 cols: 1
-
-
             Button:
                 text: "Добавить новое сообщение"
                 size_hint: 0.4, 0.1

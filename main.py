@@ -1,19 +1,10 @@
-# import all the relevant classes
 from kivy.app import App
-from kivy.core.text.markup import MarkupLabel
-from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
-from kivy.uix.popup import Popup
-from kivy.uix.floatlayout import FloatLayout
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, String, Text
 from kivy.uix.label import Label
-import pandas as pd
-
-
-# class to call the popup function
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -30,11 +21,11 @@ class GuestEntry(Base):
 
 class messagesWindow(Screen):
     def on_pre_enter(self):
-        self.ids.messages_grid.clear_widgets()  # Очистить содержимое
+        self.ids.messages_grid.clear_widgets()
         if hasattr(self, 'session'):
             entries = session.query(GuestEntry).all()
             for entry in entries:
-                # Создаем Label с размеченным текстом и указываем цвет
+                print(entry)
                 message_text = (
                     f'[color=ff0000]Имя:[/color] [color=ffffff]{entry.name}[/color]\n'
                     f'[color=ff0000]Email:[/color] [color=ffffff]{entry.email}[/color]\n'
@@ -70,12 +61,6 @@ class signupWindow(Screen):
         sm.current = 'messages'
 
 
-# class to display validation result
-class logDataWindow(Screen):
-    pass
-
-
-# class for managing screens
 class windowManager(ScreenManager):
     pass
 
@@ -85,7 +70,6 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# kv file
 kv = Builder.load_file('guestbook.kv')
 sm = windowManager()
 
@@ -99,6 +83,5 @@ class loginMain(App):
         return sm
 
 
-# driver function
 if __name__ == "__main__":
     loginMain().run()
