@@ -45,30 +45,34 @@ windowManager:
 
 
 <messagesWindow>:
-	ScrollView:
+    ScrollView:
         BoxLayout:
             orientation: 'vertical'
             spacing: 10
             padding: 10
+
             Label:
-                text: "Список сообщений:"
+                text: "История сообщений пользователей:"
                 font_size: 24
-            Label:
-                id: messages_label
-                text: ""
-                font_size: 16
+                size_hint_y: None
+                height: 30
+
+            GridLayout:
+                id: messages_grid
+                spacing: 0  # Установите минимальное значение spacing
+                padding: 5
+                cols: 1
+
+
             Button:
-                text : "Create new message"
-                size_hint : 0.4, 0.1
-                pos_hint : {"x" : 0.33, "top" : 0.4}
+                text: "Добавить новое сообщение"
+                size_hint: 0.4, 0.1
+                pos_hint: {"x": 0.33, "top": 0.4}
                 on_release:
                     app.root.current = 'signup'
                     root.manager.transition.direction = "down"
 
 
-# GUI for pop up window
-<P>:
-	Label:
-		text : "Please enter valid information"
-		size_hint : 0.2, 0.1
-		pos_hint : {"x" : 0.3, "top" : 0.8}
+
+
+

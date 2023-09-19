@@ -1,5 +1,6 @@
 # import all the relevant classes
 from kivy.app import App
+from kivy.core.text.markup import MarkupLabel
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
@@ -8,7 +9,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.floatlayout import FloatLayout
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, String, Text
-
+from kivy.uix.label import Label
 import pandas as pd
 
 
@@ -26,33 +27,22 @@ class GuestEntry(Base):
     email = Column(String)
     comment = Column(Text)
 
-class PopupWindow(Widget):
-    def btn(self):
-        popFun()
-
-
-# class to build GUI for a popup window
-class P(FloatLayout):
-    pass
-
-
-# function that displays the content
-def popFun():
-    show = P()
-    window = Popup(title="popup", content=show,
-                   size_hint=(None, None), size=(300, 300))
-    window.open()
-
 
 class messagesWindow(Screen):
     def on_pre_enter(self):
-        self.ids.messages_label.text = ""  # Очистить текстовое поле
+        self.ids.messages_grid.clear_widgets()  # Очистить содержимое
         if hasattr(self, 'session'):
             entries = session.query(GuestEntry).all()
-            message_text = ""
             for entry in entries:
-                message_text += f"Имя: {entry.name}\nEmail: {entry.email}\nСообщение: {entry.comment}\n\n"
-            self.ids.messages_label.text = message_text
+                # Создаем Label с размеченным текстом и указываем цвет
+                message_text = (
+                    f'[color=ff0000]Имя:[/color] [color=ffffff]{entry.name}[/color]\n'
+                    f'[color=ff0000]Email:[/color] [color=ffffff]{entry.email}[/color]\n'
+                    f'[color=ff0000]Сообщение:[/color] [color=ffffff]{entry.comment}[/color]\n\n'
+                )
+                label = Label(markup=True, text=message_text, halign='left', valign='top')
+                self.ids.messages_grid.add_widget(label)
+
 
 
 
