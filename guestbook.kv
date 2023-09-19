@@ -1,0 +1,74 @@
+windowManager:
+	signupWindow:
+	messagesWindow:
+
+<signupWindow>:
+    name2: name2
+    email: email
+    message: message
+    FloatLayout:
+        Label:
+            text: "NAME:"
+            size_hint: 0.2, 0.1
+            pos_hint: {"x": 0.05, "top": 0.9}
+        TextInput:
+            id: name2
+            multiline: False
+            size_hint: 0.3, 0.1
+            pos_hint: {"x": 0.27, "top": 0.9}
+        Label:
+            text: "EMAIL:"
+            size_hint: 0.2, 0.1
+            pos_hint: {"x": 0.05, "top": 0.7}
+        TextInput:
+            id: email
+            multiline: False
+            size_hint: 0.3, 0.1
+            pos_hint: {"x": 0.27, "top": 0.7}
+        Label:
+            text: "MESSAGE:"
+            size_hint: 0.2, 0.1
+            pos_hint: {"x": 0.05, "top": 0.5}
+        TextInput:
+            id: message
+            multiline: True  # Сделать многострочным
+            size_hint: 0.6, 0.3  # Увеличить ширину и высоту
+            pos_hint: {"x": 0.27, "top": 0.5}
+        Button:
+            text: "SUBMIT"
+            size_hint: 0.3, 0.1
+            pos_hint: {"x": 0.27, "top": 0.15}
+            on_press:
+                root.signupbtn()
+                root.manager.transition.direction = "right"
+
+
+
+<messagesWindow>:
+	ScrollView:
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+            padding: 10
+            Label:
+                text: "Список сообщений:"
+                font_size: 24
+            Label:
+                id: messages_label
+                text: ""
+                font_size: 16
+            Button:
+                text : "Create new message"
+                size_hint : 0.4, 0.1
+                pos_hint : {"x" : 0.33, "top" : 0.4}
+                on_release:
+                    app.root.current = 'signup'
+                    root.manager.transition.direction = "down"
+
+
+# GUI for pop up window
+<P>:
+	Label:
+		text : "Please enter valid information"
+		size_hint : 0.2, 0.1
+		pos_hint : {"x" : 0.3, "top" : 0.8}
