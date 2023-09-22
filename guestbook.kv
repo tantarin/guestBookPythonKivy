@@ -48,20 +48,11 @@ windowManager:
     ScrollView:
         BoxLayout:
             orientation: 'vertical'
-            spacing: 10
-            padding: 10
-
-            Label:
-                text: "История сообщений пользователей:"
-                font_size: 24
-                size_hint_y: None
-                height: 30
-
             GridLayout:
                 id: messages_grid
-                spacing: 0
-                padding: 5
-                cols: 1
+                cols: 2
+                row_force_default: True
+                row_default_height: 200
             Button:
                 text: "Добавить новое сообщение"
                 size_hint: 0.4, 0.1
@@ -69,8 +60,6 @@ windowManager:
                 on_release:
                     app.root.current = 'signup'
                     root.manager.transition.direction = "down"
-
-
 
 
 
