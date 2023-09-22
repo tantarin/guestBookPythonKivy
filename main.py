@@ -1,14 +1,15 @@
 from kivy.app import App
+from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, String, Text
-from kivy.uix.label import Label
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
+
 
 class GuestEntry(Base):
     __tablename__ = 'guest_entries'
@@ -25,16 +26,15 @@ class messagesWindow(Screen):
         if hasattr(self, 'session'):
             entries = session.query(GuestEntry).all()
             for entry in entries:
-                print(entry)
-                message_text = (
-                    f'[color=ff0000]Имя:[/color] [color=ffffff]{entry.name}[/color]\n'
-                    f'[color=ff0000]Email:[/color] [color=ffffff]{entry.email}[/color]\n'
-                    f'[color=ff0000]Сообщение:[/color] [color=ffffff]{entry.comment}[/color]\n\n'
-                )
-                label = Label(markup=True, text=message_text, halign='left', valign='top')
-                self.ids.messages_grid.add_widget(label)
-
-
+                name_and_email = f'{entry.name}, {entry.email}'
+                comment_text = entry.comment
+                name_email_label = Button(text=name_and_email)
+                comment_label = Button(text=comment_text)
+                name_email_label.color = (1, 0, 0, 1)
+                name_email_label.size_hint_x = 0.3
+                comment_label.size_hint_x = 0.7
+                self.ids.messages_grid.add_widget(name_email_label)
+                self.ids.messages_grid.add_widget(comment_label)
 
 
 class signupWindow(Screen):
@@ -47,16 +47,12 @@ class signupWindow(Screen):
         email = self.email.text if self.email else ""  # Проверка наличия email
         message = self.message.text if self.message else ""  #
         if name2 and message:
-            # добавляем в бд
             new_entry = GuestEntry(name=name2, email=email, comment=message)  # Сохраняем email
             session.add(new_entry)
             session.commit()
-            # Очищаем поля
             self.name2.text = ''
             self.email.text = ''
             self.message.text = ''
-        entries = session.query(GuestEntry).all()
-        print(entries)
         sm.get_screen('messages').session = session
         sm.current = 'messages'
 
@@ -81,6 +77,10 @@ class loginMain(App):
         sm.add_widget(signup_window)
         sm.add_widget(messages_window)
         return sm
+
+
+if __name__ == "__main__":
+    loginMain().run()
 
 
 if __name__ == "__main__":
