@@ -4,7 +4,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Column, Integer, String, Text
+from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -21,7 +21,7 @@ class GuestEntry(Base):
 
 
 class messagesWindow(Screen):
-    def on_pre_enter(self):
+    def on_pre_enter(self): #действия перед показом экрана
         self.ids.messages_grid.clear_widgets()
         if hasattr(self, 'session'):
             entries = session.query(GuestEntry).all()
@@ -37,17 +37,17 @@ class messagesWindow(Screen):
                 self.ids.messages_grid.add_widget(comment_label)
 
 
-class signupWindow(Screen):
+class addWindow(Screen):
     name2 = ObjectProperty(None)
     email = ObjectProperty(None)
     message = ObjectProperty(None)
 
-    def signupbtn(self):
-        name2 = self.name2.text if self.name else ""  # Проверка наличия имени
-        email = self.email.text if self.email else ""  # Проверка наличия email
-        message = self.message.text if self.message else ""  #
-        if name2 and message:
-            new_entry = GuestEntry(name=name2, email=email, comment=message)  # Сохраняем email
+    def addbtn(self):
+        name2 = self.name2.text if self.name else ""
+        email = self.email.text if self.email else ""
+        message = self.message.text if self.message else ""
+        if name2 and message and email:
+            new_entry = GuestEntry(name=name2, email=email, comment=message)
             session.add(new_entry)
             session.commit()
             self.name2.text = ''
@@ -61,7 +61,7 @@ class windowManager(ScreenManager):
     pass
 
 
-engine = create_engine('sqlite:///:memory:', echo=True)
+engine = create_engine('sqlite:///:memory:')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -70,18 +70,14 @@ kv = Builder.load_file('guestbook.kv')
 sm = windowManager()
 
 
-class loginMain(App):
+class main(App):
     def build(self):
-        signup_window = signupWindow(name='signup')
+        add_window = addWindow(name='add')
         messages_window = messagesWindow(name='messages')
-        sm.add_widget(signup_window)
+        sm.add_widget(add_window)
         sm.add_widget(messages_window)
         return sm
 
 
 if __name__ == "__main__":
-    loginMain().run()
-
-
-if __name__ == "__main__":
-    loginMain().run()
+    main().run()
