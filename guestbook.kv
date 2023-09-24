@@ -1,8 +1,8 @@
 windowManager:
-	signupWindow:
+	addWindow:
 	messagesWindow:
 
-<signupWindow>:
+<addWindow>:
     name2: name2
     email: email
     message: message
@@ -39,7 +39,7 @@ windowManager:
             size_hint: 0.3, 0.1
             pos_hint: {"x": 0.27, "top": 0.15}
             on_press:
-                root.signupbtn()
+                root.addbtn()
                 root.manager.transition.direction = "right"
 
 
@@ -58,8 +58,14 @@ windowManager:
                 size_hint: 0.4, 0.1
                 pos_hint: {"x": 0.33, "top": 0.4}
                 on_release:
-                    app.root.current = 'signup'
+                    app.root.current = 'add'
                     root.manager.transition.direction = "down"
+
+
+
+
+
+
 
 
 
